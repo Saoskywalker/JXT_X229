@@ -1,0 +1,193 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <PropertyGroup Condition="">
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <AssemblyName>X229</AssemblyName>
+    <BackupACC>True</BackupACC>
+    <BackupFSR>True</BackupFSR>
+    <BackupPCHBUF>True</BackupPCHBUF>
+    <BackupSTATUS>True</BackupSTATUS>
+    <Bank0Only>False</Bank0Only>
+    <BankselOptLevel>2</BankselOptLevel>
+    <BuildCCompilerVersion>NYC_NY8 1.44 [Build: 220628.00]</BuildCCompilerVersion>
+    <BuildNYASMVersion>NYASM 2.35 [Build: 220628.00]</BuildNYASMVersion>
+    <BuildNYIDEVersion>NYIDE 4.71 [Build: 220630.00]</BuildNYIDEVersion>
+    <CCompilerInstallDir>C:\Nyquest\NYC_NY8</CCompilerInstallDir>
+    <ChipId>NY8BE62D</ChipId>
+    <ClientName>X229</ClientName>
+    <CodeOptimization>Enable</CodeOptimization>
+    <Configuration>Debug</Configuration>
+    <FreezeMode>True</FreezeMode>
+    <GenAsmListFile>True</GenAsmListFile>
+    <GenListFile>True</GenListFile>
+    <GenMapFile>True</GenMapFile>
+    <IncludePath></IncludePath>
+    <InitEEPROM>True</InitEEPROM>
+    <InitializeBss>True</InitializeBss>
+    <IsBankselOpt>True</IsBankselOpt>
+    <LibraryFiles></LibraryFiles>
+    <NYASMInstallDir>C:\Nyquest\NYASM\</NYASMInstallDir>
+    <NYIDEInstallDir>C:\Nyquest\NYIDE\</NYIDEInstallDir>
+    <OutputType>bin</OutputType>
+    <Platform>CNy8</Platform>
+    <ProjectGuid>{A987742A-D62C-49B2-9759-13A10E2FF1D1}</ProjectGuid>
+    <ProjectOptionChanged>False</ProjectOptionChanged>
+    <ReservedInterruptRam>2</ReservedInterruptRam>
+    <ReservedRam>16</ReservedRam>
+    <RootNamespace>NY8B062D_ADC_Polling</RootNamespace>
+    <TrimSetting>+ 0%</TrimSetting>
+    <WarningMsgCode0>112</WarningMsgCode0>
+    <WarningMsgCode1>112</WarningMsgCode1>
+    <WarningMsgCode2>112</WarningMsgCode2>
+    <WarningMsgCount>0</WarningMsgCount>
+    <WarningMsgFileName0>D:\work\2022\K653\Code\220420\K653\K653\main.c</WarningMsgFileName0>
+    <WarningMsgFileName1>D:\work\2022\K653\Code\220420\K653\K653\main.c</WarningMsgFileName1>
+    <WarningMsgFileName2>D:\work\2022\K653\Code\220420\K653\K653\main.c</WarningMsgFileName2>
+    <WarningMsgLineNumber0>613</WarningMsgLineNumber0>
+    <WarningMsgLineNumber1>620</WarningMsgLineNumber1>
+    <WarningMsgLineNumber2>622</WarningMsgLineNumber2>
+    <WarningMsgMessage0>function 'chargeDetect' implicit declaration</WarningMsgMessage0>
+    <WarningMsgMessage1>function 'BatLevelDetect' implicit declaration</WarningMsgMessage1>
+    <WarningMsgMessage2>function 'MotorRunFunc' implicit declaration</WarningMsgMessage2>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>True</DebugSymbols>
+    <DebugType>Full</DebugType>
+    <Optimize>False</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>False</DebugSymbols>
+    <DebugType>None</DebugType>
+    <Optimize>True</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="main.c" EntryPoint="false" MetaData="" />
+    <None Include="X229.cb" EntryPoint="false" MetaData="" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Client: K653" EntryPoint="false" MetaData="" />
+    <Reference Include="Config Block: K653.cb" EntryPoint="false" MetaData="" />
+    <Reference Include="IC Body: NY8BE62D" EntryPoint="false" MetaData="" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="C:\Nyquest\NY8_Example_Code\include\NY8 C\ny8_constant.h" EntryPoint="false" MetaData="Dependency Files\ny8_constant.h" />
+    <ApplicationDefinition Include="C:\Nyquest\NY8_Example_Code\include\NY8 C\ny8be62d_constant.h" EntryPoint="false" MetaData="Dependency Files\ny8be62d_constant.h" />
+    <ApplicationDefinition Include="C:\Nyquest\NYC_NY8\include\ny8.h" EntryPoint="false" MetaData="Dependency Files\ny8.h" />
+    <ApplicationDefinition Include="C:\Nyquest\NYC_NY8\include\ny8_eeprom.h" EntryPoint="false" MetaData="Dependency Files\ny8_eeprom.h" />
+    <ApplicationDefinition Include="C:\Nyquest\NYC_NY8\include\ny8be62d.h" EntryPoint="false" MetaData="Dependency Files\ny8be62d.h" />
+    <ApplicationDefinition Include="C:\Nyquest\NYC_NY8\include\ny8common.h" EntryPoint="false" MetaData="Dependency Files\ny8common.h" />
+    <Folder Include="Dependency Files" EntryPoint="false" MetaData="" />
+    <Folder Include="ResourceFiles" EntryPoint="false" MetaData="" />
+    <Folder Include="ResourceFiles\EEPROM" EntryPoint="false" MetaData="" />
+  </ItemGroup>
+  <Properties>
+    <Array name="ActionFiles" />
+    <Array name="bookmarks" />
+    <Array name="DisassemblyPadColumnWidthInfo">
+      <Element value="AddrWidth|60" />
+      <Element value="CodeWidth|140" />
+      <Element value="ArrowWidth|20" />
+    </Array>
+    <Array name="EEPROMOverwriteData" />
+    <Array name="ExternalResource" />
+    <Array name="files">
+      <Element value="main.c|True" />
+      <Element value="C:/Nyquest/NY8_Example_Code/include/NY8 C/ny8be62d_constant.h|False" />
+      <Element value="C:/Nyquest/NYC_NY8/include/ny8be62d.h|False" />
+      <Element value="C:/Nyquest/NYC_NY8/include/ny8.h|False" />
+      <Element value="C:/Nyquest/NY8_Example_Code/include/NY8 C/ny8_constant.h|False" />
+      <Element value="C:/Nyquest/NYC_NY8/include/ny8_eeprom.h|False" />
+    </Array>
+    <Array name="InstrumentFiles" />
+    <Array name="MelodyDatabaseFiles" />
+    <Array name="MusicFiles" />
+    <Array name="RegisterPadExpandInfo">
+      <Element value="0|True" />
+      <Element value="100|False" />
+      <Element value="101|False" />
+      <Element value="102|False" />
+      <Element value="103|False" />
+      <Element value="104|False" />
+      <Element value="105|False" />
+      <Element value="106|False" />
+      <Element value="107|False" />
+      <Element value="108|False" />
+      <Element value="109|False" />
+      <Element value="110|False" />
+      <Element value="111|False" />
+      <Element value="112|False" />
+      <Element value="113|False" />
+      <Element value="114|False" />
+      <Element value="115|False" />
+      <Element value="116|False" />
+      <Element value="117|False" />
+      <Element value="118|False" />
+      <Element value="119|False" />
+      <Element value="120|False" />
+      <Element value="121|False" />
+      <Element value="122|False" />
+      <Element value="123|False" />
+      <Element value="124|False" />
+      <Element value="125|False" />
+      <Element value="126|False" />
+      <Element value="127|False" />
+      <Element value="128|False" />
+      <Element value="129|False" />
+      <Element value="1|True" />
+      <Element value="200|False" />
+      <Element value="201|False" />
+      <Element value="202|False" />
+      <Element value="203|False" />
+      <Element value="204|False" />
+      <Element value="205|False" />
+      <Element value="206|False" />
+      <Element value="2|True" />
+      <Element value="300|False" />
+      <Element value="301|False" />
+      <Element value="302|False" />
+      <Element value="303|False" />
+      <Element value="304|False" />
+      <Element value="305|False" />
+      <Element value="306|False" />
+      <Element value="307|False" />
+      <Element value="308|False" />
+      <Element value="309|False" />
+      <Element value="310|False" />
+      <Element value="311|False" />
+      <Element value="312|False" />
+      <Element value="313|False" />
+      <Element value="314|False" />
+      <Element value="315|False" />
+      <Element value="316|False" />
+      <Element value="317|False" />
+      <Element value="318|False" />
+      <Element value="319|False" />
+      <Element value="320|False" />
+      <Element value="321|False" />
+      <Element value="322|False" />
+      <Element value="323|False" />
+      <Element value="324|False" />
+      <Element value="3|True" />
+      <Element value="400|False" />
+      <Element value="401|False" />
+      <Element value="402|False" />
+      <Element value="403|False" />
+    </Array>
+    <Array name="UpdateableResources" />
+    <Array name="VoiceFiles" />
+    <Array name="VRModule" />
+    <Array name="WatchItemInfo">
+      <Element value="u16AdcResult|" />
+      <Element value="WorkMode|" />
+      <Element value="DKeypresstime|" />
+    </Array>
+    <Array name="WatchPadColumnWidthInfo">
+      <Element value="NameWidth|183" />
+      <Element value="AddrWidth|132" />
+      <Element value="ValWidth|50" />
+      <Element value="PageWidth|80" />
+    </Array>
+  </Properties>
+</Project>

@@ -1,0 +1,13 @@
+/output
+/.vscode
+/*.uvopt
+*.uvproj
+/X229/OBJ
+/Project/MDK_Project
+*.code-workspace
+*.lst
+*.bin
+*.elf
+*.htm
+*.map
+/source insight

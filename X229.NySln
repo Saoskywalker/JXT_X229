@@ -1,0 +1,17 @@
+﻿
+Nyquest IDE Solution File, Format Version 1.00
+# NYIDE 4.70.0.2557
+Project("{608D5F73-6C2E-489F-8ED6-C0FBCCEB586F}") = "X229", "X229\X229.naprj", "{EFF3DCA6-8B9E-435A-A0B6-2E38E743E56E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any = Debug|Any
+		Release|Any = Release|Any
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EFF3DCA6-8B9E-435A-A0B6-2E38E743E56E}.Debug|Any.Build.0 = Debug|Any
+		{EFF3DCA6-8B9E-435A-A0B6-2E38E743E56E}.Debug|Any.ActiveCfg = Debug|Any
+		{EFF3DCA6-8B9E-435A-A0B6-2E38E743E56E}.Release|Any.Build.0 = Release|Any
+		{EFF3DCA6-8B9E-435A-A0B6-2E38E743E56E}.Release|Any.ActiveCfg = Release|Any
+	EndGlobalSection
+EndGlobal
