@@ -107,7 +107,7 @@ volatile unsigned char SystemStatus=0;
 volatile unsigned char MotorStatus=0;
 volatile unsigned char LedStatus=0;
 volatile unsigned char MotorRuntime=0;
-volatile unsigned char SinglePengWucnt=0;
+volatile unsigned char SinglePengWucnt=0; //按下一次按键, 喷雾次数
 volatile unsigned char Send_Timer_Cnt_10S=0;
 volatile unsigned char Send_Timer_Cnt_50S=0;
 volatile unsigned char Send_Timer_Cnt_10Min=0;
@@ -135,8 +135,8 @@ volatile unsigned int BKeypresstime=0;
 volatile unsigned int CKeypresstime=0;
 volatile unsigned int DKeypresstime=0;
 volatile unsigned long  MotorRunlongtimeCnt=0;
-volatile unsigned int  MotorRunintvaltimeCnt=0;
-volatile unsigned int MotorSingleRunintvaltimeCnt=0;
+volatile unsigned int  MotorRunintvaltimeCnt=0; //定时喷雾计时
+volatile unsigned int MotorSingleRunintvaltimeCnt=0; //单击喷雾计时
 volatile unsigned int  R_AIN0_DATA=0;	
 unsigned long Ad_Sum=0;
 unsigned int u16AdcResult=0;
@@ -146,14 +146,14 @@ unsigned char MotorOnDelayTimeCnt=0;
 unsigned char Led_Pwm_Cnt_Cycle=0;
 unsigned char Led_Pwm_Cnt_DutyBuffer=0;
 unsigned char DelayToLowSpeedTimeCnt = 0;
-unsigned char keyShortPressTimerCnt=0;
+unsigned char keyShortPressTimerCnt=0; //多击按键间隔计时
 unsigned int  PengwuRunTimeCnt=0;
-unsigned char PengWucnt=0;
-unsigned char short_key_PerssCnt=0;
+unsigned char PengWucnt=0; //一个定时周期喷雾次数
+unsigned char short_key_PerssCnt=0; //多击按键次数
 
 
 __sbit f_Power_ON_AD = SystemFlag1 : 0;
-__sbit f_short_key_WuHua_on = SystemFlag1 : 1;
+__sbit f_short_key_WuHua_on = SystemFlag1 : 1; //单击雾化标志
 __sbit f_intervalstop = SystemFlag1 : 2;
 __sbit KeyLongPressflag = SystemFlag1 : 3;
 __sbit f_EnableSleep = SystemFlag1 : 4;
@@ -165,7 +165,7 @@ __sbit f_Timer2ms = SystemFlag2 : 0;
 __sbit f_Timer10ms = SystemFlag2 : 1;
 __sbit f_Timer50ms = SystemFlag2 : 2;
 __sbit f_Timer100ms = SystemFlag2 : 3;
-__sbit f_Key2PressEnable = SystemFlag2 : 4;
+__sbit f_Key2PressEnable = SystemFlag2 : 4; //单击按键标志
 __sbit f_fisrtPress = SystemFlag2 : 5;
 __sbit ModeLedOnFlag = SystemFlag2 : 6;
 __sbit f_SystemonInit = SystemFlag2 : 7;
@@ -461,6 +461,7 @@ void keyHandle(void)
 	}
 }
 //-----------------------------------------------------------
+//一次喷Runtime, 多次间隔intervalstoptime(0为只喷1次), 一次喷雾周期Stoptime
 void MotorIntvialRunFunc(int Runtime,int intervalstoptime,int Stoptime)
 {
 	if(f_Enable_SinglePengwuStatus)
@@ -501,7 +502,7 @@ void MotorIntvialRunFunc(int Runtime,int intervalstoptime,int Stoptime)
 		}
 		else
 		{
-			if(f_intervalstopsingle)
+			if(f_intervalstopsingle) //是否多次喷雾
 			{
 				if(MotorSingleRunintvaltimeCnt >= intervalstoptime)
 				{
@@ -546,7 +547,7 @@ void MotorIntvialRunFunc(int Runtime,int intervalstoptime,int Stoptime)
 		}	
 		else
 		{
-			if(f_intervalstop)
+			if(f_intervalstop) //是否多次喷雾
 			{
 				if(MotorRunintvaltimeCnt >= intervalstoptime)
 				{
@@ -633,7 +634,7 @@ void MotorFunc(void)
 					P2CR1 |= (C_PWM2_En);
 					P3CR1 |= (C_PWM3_En);
 				}
-				MotorIntvialRunFunc(30,5,3000);//5S 300S
+				MotorIntvialRunFunc(50, 0, 3000); //喷一次, 一次喷5s, 间隔0.5s, 一次喷雾周期5min
 				break;
 			case 2:	
 				if(StartWuHuaFLag)
@@ -654,7 +655,7 @@ void MotorFunc(void)
 					P2CR1 |= (C_PWM2_En);
 					P3CR1 |= (C_PWM3_En);
 				}
-				MotorIntvialRunFunc(30,5,1800);//6S 300S
+				MotorIntvialRunFunc(30, 5, 1800); //喷2次, 一次喷3s, 间隔0.5s, 一次喷雾周期3min
 				break;
 			default:
 				break;
