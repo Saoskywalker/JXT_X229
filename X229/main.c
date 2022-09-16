@@ -95,10 +95,11 @@
 // #define INLINE_ULTRASOUND_CLOSE() MotorPWM = MotorPwmOFF; T4CR1  &= ~(C_PWM4_En)
 // #define INLINE_ULTRASOUND_OPEN() T4CR1 |= (C_PWM4_En)
 
-//因快充头在电流长时间低于约80mA, 充电头会断电然后再供电, 为避免断电, 需在待机时用输出负载加大电流 
-unsigned char pwm4_temp_value = 0X09; //临时变量, 避免频繁写PWM, 造成输出抖动
-#define INLINE_ULTRASOUND_CLOSE() if(pwm4_temp_value!=0X01) {TMR4 = 0X08; PWM4DUTY = 0X01; pwm4_temp_value = 0X01;}
-#define INLINE_ULTRASOUND_OPEN() if(pwm4_temp_value!=0X09) {TMR4 = 0X11; PWM4DUTY = 0X09; pwm4_temp_value = 0X09;}
+unsigned char ultrasound_close_time = 0; //超声波关闭输出时间, 单位100ms
+unsigned char pwm4_temp_value = 0X00; //临时变量, 避免频繁写PWM, 造成输出抖动
+unsigned char ultrasound_output_flag = 0;
+#define INLINE_ULTRASOUND_CLOSE() ultrasound_output_flag = 0
+#define INLINE_ULTRASOUND_OPEN() ultrasound_output_flag = 1
 
 //变量
 volatile unsigned char u8CntAdSamp=0;
@@ -309,8 +310,7 @@ void Pwm_Init(void)
     PWM4DUTY = 0x09;			// Move 00H to PWM3DUTY LB register ( PWM3DUTY[9:0]=300H )
     T4CR2	 = C_PS4_Dis | C_TMR4_ClkSrc_Inst;	// Prescaler 1:1 , Timer3 clock source is instruction clock  
     T4CR1	 = C_PWM4_En | C_PWM4_Active_Hi | C_TMR4_Reload | C_TMR4_En;	// Enable PWM3 , Active_High , Non-Stop mode ,reloaded from TMR3[9:0] , enable Timer3 
-	// T4CR1  &= ~(C_PWM4_En);
-	T4CR1 |= (C_PWM4_En); //将IO设为PWM功能
+	T4CR1  &= ~(C_PWM4_En);
 }
 //--------------- System init --------------------------------------------
 //--------------------------------------------------------------------------
@@ -687,6 +687,47 @@ void MotorFunc(void)
 		f_StoptimeUp = 0;
 		PengWucnt=0;
 	}
+
+	//因快充头在电流长时间低于约80mA, 充电头会断电然后再供电, 为避免断电, 需在待机时用输出负载加大电流 
+	if (ultrasound_output_flag) //是否需要开启超声波雾化
+	{
+		ultrasound_close_time = 0;
+		if (pwm4_temp_value != 0X09)
+		{
+			TMR4 = 0X11;
+			PWM4DUTY = 0X09;
+			T4CR1 |= (C_PWM4_En); //将IO设为PWM功能
+			pwm4_temp_value = 0X09;
+		}
+	}
+	else
+	{
+		//采用脉冲方式, 避免待机时器件过热
+		if (ultrasound_close_time >= 150)
+		{
+			ultrasound_close_time = 0;
+		}
+
+		if (ultrasound_close_time <= 50)
+		{
+			if (pwm4_temp_value != 0X01)
+			{
+				TMR4 = 0X08;
+				PWM4DUTY = 0X02;
+				T4CR1 |= (C_PWM4_En); //将IO设为PWM功能
+				pwm4_temp_value = 0X01;
+			}
+		}
+		else
+		{
+			if (pwm4_temp_value != 0X00)
+			{
+				MotorPWM = MotorPwmOFF;
+				T4CR1 &= ~(C_PWM4_En); //切换为普通IO
+				pwm4_temp_value = 0X00;
+			}
+		}
+	}
 }
 //--------------------------------------------------------------------------
 //
@@ -818,6 +859,7 @@ void isr(void) __interrupt(0)
 						f_Timer100ms = 1;
 						MotorRunlongtimeCnt++;
 						MotorSingleRunintvaltimeCnt++;
+						ultrasound_close_time++;
 						MotorRunintvaltimeCnt++;  
 						if(MotorOnDelayTimeCnt<6)
 						MotorOnDelayTimeCnt++;
