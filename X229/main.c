@@ -91,6 +91,15 @@
 
 #define RedLed	1
 #define WieghtLed 0
+
+// #define INLINE_ULTRASOUND_CLOSE() MotorPWM = MotorPwmOFF; T4CR1  &= ~(C_PWM4_En)
+// #define INLINE_ULTRASOUND_OPEN() T4CR1 |= (C_PWM4_En)
+
+//因快充头在电流长时间低于约80mA, 充电头会断电然后再供电, 为避免断电, 需在待机时用输出负载加大电流 
+unsigned char pwm4_temp_value = 0X09; //临时变量, 避免频繁写PWM, 造成输出抖动
+#define INLINE_ULTRASOUND_CLOSE() if(pwm4_temp_value!=0X01) {TMR4 = 0X08; PWM4DUTY = 0X01; pwm4_temp_value = 0X01;}
+#define INLINE_ULTRASOUND_OPEN() if(pwm4_temp_value!=0X09) {TMR4 = 0X11; PWM4DUTY = 0X09; pwm4_temp_value = 0X09;}
+
 //变量
 volatile unsigned char u8CntAdSamp=0;
 volatile unsigned char u8CntFeedbackAdSamp=0;
@@ -300,7 +309,8 @@ void Pwm_Init(void)
     PWM4DUTY = 0x09;			// Move 00H to PWM3DUTY LB register ( PWM3DUTY[9:0]=300H )
     T4CR2	 = C_PS4_Dis | C_TMR4_ClkSrc_Inst;	// Prescaler 1:1 , Timer3 clock source is instruction clock  
     T4CR1	 = C_PWM4_En | C_PWM4_Active_Hi | C_TMR4_Reload | C_TMR4_En;	// Enable PWM3 , Active_High , Non-Stop mode ,reloaded from TMR3[9:0] , enable Timer3 
-	T4CR1  &= ~(C_PWM4_En);
+	// T4CR1  &= ~(C_PWM4_En);
+	T4CR1 |= (C_PWM4_En); //将IO设为PWM功能
 }
 //--------------- System init --------------------------------------------
 //--------------------------------------------------------------------------
@@ -469,7 +479,7 @@ void MotorIntvialRunFunc(int Runtime,int intervalstoptime,int Stoptime)
 		if((MotorStatus == MotorOFF)&&(f_intervalstopsingle==0))
 		{
 			MotorStatus = MotorON;	//开启马达
-			T4CR1  |= (C_PWM4_En);
+			INLINE_ULTRASOUND_OPEN();
 		}
 		if(MotorSingleRunintvaltimeCnt >= PengwuRunTimeCnt)
 		{
@@ -497,8 +507,7 @@ void MotorIntvialRunFunc(int Runtime,int intervalstoptime,int Stoptime)
 				f_StoptimeUp = 0;
 			}
 			MotorStatus = MotorOFF;	
-			MotorPWM = MotorPwmOFF;
-			T4CR1  &= ~(C_PWM4_En);
+			INLINE_ULTRASOUND_CLOSE();
 		}
 		else
 		{
@@ -510,8 +519,7 @@ void MotorIntvialRunFunc(int Runtime,int intervalstoptime,int Stoptime)
 					f_intervalstopsingle = 0;
 					
 					MotorStatus = MotorON;	//开启马达
-					//MotorPWM = MotorPwmON;
-					T4CR1  |= (C_PWM4_En);
+					INLINE_ULTRASOUND_OPEN();
 				}
 			}
 		}
@@ -541,8 +549,7 @@ void MotorIntvialRunFunc(int Runtime,int intervalstoptime,int Stoptime)
 					f_intervalstop=0;
 					
 				MotorStatus = MotorOFF;	
-				MotorPWM = MotorPwmOFF;
-				T4CR1  &= ~(C_PWM4_En);
+				INLINE_ULTRASOUND_CLOSE();
 			}
 		}	
 		else
@@ -556,8 +563,7 @@ void MotorIntvialRunFunc(int Runtime,int intervalstoptime,int Stoptime)
 					
 					f_StoptimeUp = 1;
 					MotorStatus = MotorON;	//开启马达
-					//MotorPWM = MotorPwmON;
-					T4CR1  |= (C_PWM4_En);
+					INLINE_ULTRASOUND_OPEN();
 				}
 			}
 			else
@@ -567,8 +573,7 @@ void MotorIntvialRunFunc(int Runtime,int intervalstoptime,int Stoptime)
 					MotorRunintvaltimeCnt = 0;
 					f_StoptimeUp = 1;
 					MotorStatus = MotorON;	//开启马达
-					//MotorPWM = MotorPwmON;
-					T4CR1  |= (C_PWM4_En);
+					INLINE_ULTRASOUND_OPEN();
 				}	
 			}	
 		}
@@ -578,8 +583,7 @@ void MotorIntvialRunFunc(int Runtime,int intervalstoptime,int Stoptime)
 void MotorONFunc(void)
 {
 	MotorStatus = MotorON; 
-	//MotorPWM = MotorPwmON;
-	T4CR1  |= C_PWM4_En;
+	INLINE_ULTRASOUND_OPEN();
 	MotorOnDelayTimeCnt =0;
 	MotorRunlongtimeCnt=0;
 	MotorRunintvaltimeCnt = 0;
@@ -588,17 +592,18 @@ void MotorONFunc(void)
 }
 
 //-----------------------------------------------------------
+/* 
 void MotorOFFFunc(void)
 {
 	MotorStatus = MotorOFF;	
-	MotorPWM = MotorPwmOFF;
-	T4CR1  &= ~(C_PWM4_En);
+	INLINE_ULTRASOUND_CLOSE();
 	MotorOnDelayTimeCnt=0;
 	MotorRunlongtimeCnt=0;
 	MotorRunintvaltimeCnt = 0;
 	MotorTotaltimeCntL = 0;
 	MotorTotaltimeCntH = 0;	
 }
+ */
 //-----------------------------------------------------------
 void MotorFunc(void)
 {
@@ -610,10 +615,9 @@ void MotorFunc(void)
 				if(f_EnableSleep)
 				{
 					MotorStatus = MotorOFF;	
-					MotorPWM = MotorPwmOFF;
+					INLINE_ULTRASOUND_CLOSE();
 					SystemStatus = PowerOFF;
 					f_EnableSleep = 1;		//关机睡眠
-					T4CR1  &= ~(C_PWM4_En);
 				}
 				break;
 			case 1:
@@ -675,8 +679,7 @@ void MotorFunc(void)
 		Pwm_LED_Blue_Duty = 0;
 		f_PwmMax = 0;
 		MotorStatus = MotorOFF;	
-		MotorPWM = MotorPwmOFF;
-		T4CR1  &= ~(C_PWM4_En);
+		INLINE_ULTRASOUND_CLOSE();
 		f_Enable_SinglePengwuStatus = 0;
 		MotorSingleRunintvaltimeCnt = 0;
 		MotorRunintvaltimeCnt=0;
