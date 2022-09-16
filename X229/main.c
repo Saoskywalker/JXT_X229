@@ -297,7 +297,7 @@ void Pwm_Init(void)
     TM4RH   = 00;//C_TMR4_Data_b9 | C_TMR4_Data_b8 | C_PWM4_Duty_b9 | C_PWM4_Duty_b8;				
     TMR4	= 0x11;						// Move FFH to TMR3 LB register  ( TMR3[9:0]=3FFH )
    
-    PWM4DUTY = 0x04;			// Move 00H to PWM3DUTY LB register ( PWM3DUTY[9:0]=300H )
+    PWM4DUTY = 0x09;			// Move 00H to PWM3DUTY LB register ( PWM3DUTY[9:0]=300H )
     T4CR2	 = C_PS4_Dis | C_TMR4_ClkSrc_Inst;	// Prescaler 1:1 , Timer3 clock source is instruction clock  
     T4CR1	 = C_PWM4_En | C_PWM4_Active_Hi | C_TMR4_Reload | C_TMR4_En;	// Enable PWM3 , Active_High , Non-Stop mode ,reloaded from TMR3[9:0] , enable Timer3 
 	T4CR1  &= ~(C_PWM4_En);
